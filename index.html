@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6f7fb" />
+    <title>稿子间 · 公众号自动发文</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand"><span class="brand-mark">稿</span><span>稿子间</span></div>
+        <div class="workspace-chip"><span class="avatar">龙</span><span><strong>龙祥的工作台</strong><small>内容创作空间</small></span><span class="chevron">⌄</span></div>
+        <nav class="nav-list" aria-label="主导航">
+          <a class="nav-item active" href="#workspace"><span class="nav-icon">✦</span>创作工作台</a>
+          <a class="nav-item" id="history-link" href="#history"><span class="nav-icon">◷</span>历史文章<span class="nav-count" id="history-count">0</span></a>
+          <a class="nav-item" href="#account"><span class="nav-icon">◉</span>公众号绑定</a>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="connection"><span class="status-dot"></span><span><strong id="service-status">检测模型服务中</strong><small id="service-detail">请稍候</small></span></div>
+          <button class="help-link" type="button"><span>?</span>使用帮助</button>
+        </div>
+      </aside>
+
+      <main class="main-content" id="workspace">
+        <header class="topbar">
+          <div><p class="eyebrow">公众号内容工作台 <span class="live-pill">本地模式</span></p><h1>今天写点有用的</h1></div>
+          <div class="top-actions"><button class="icon-button" type="button" aria-label="通知">♧<b></b></button><button class="profile-button" type="button"><span class="avatar small">龙</span><span>龙祥</span><span class="chevron">⌄</span></button></div>
+        </header>
+
+        <section class="workspace-grid">
+          <section class="panel brief-panel" aria-labelledby="brief-title">
+            <div class="panel-heading"><div><p class="section-kicker">01 / 写作要求</p><h2 id="brief-title">告诉我你想写什么</h2></div><span class="save-state">自动保存中</span></div>
+            <label class="field-label" for="topic">文章主题 <span>必填</span></label>
+            <textarea id="topic" rows="3">别再把 AI 当搜索框：普通人也能用的 4 步工作流</textarea>
+            <div class="field-grid">
+              <div><label class="field-label" for="audience">目标读者 <span>可自定义</span></label><div class="editable-wrap combo" data-combo="audience"><input id="audience" value="对效率感兴趣的职场人" maxlength="100" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="audience-options" /><button class="combo-toggle" type="button" aria-label="展开目标读者选项">⌄</button><div class="combo-menu" id="audience-options" role="listbox" hidden></div></div></div>
+              <div><label class="field-label" for="tone">文章语气 <span>可自定义</span></label><div class="editable-wrap combo" data-combo="tone"><input id="tone" value="清晰、克制、有启发" maxlength="100" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="tone-options" /><button class="combo-toggle" type="button" aria-label="展开文章语气选项">⌄</button><div class="combo-menu" id="tone-options" role="listbox" hidden></div></div></div>
+            </div>
+            <div class="field-grid second-row">
+              <div><label class="field-label" for="length">文章长度</label><div class="range-row"><input id="length" type="range" min="600" max="1800" step="100" value="1200" /><span id="length-value">约 1200 字</span></div></div>
+              <div><label class="field-label" for="style">配图风格 <span>可自定义</span></label><div class="editable-wrap combo" data-combo="style"><input id="style" value="杂志摄影" maxlength="100" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="style-options" /><button class="combo-toggle" type="button" aria-label="展开配图风格选项">⌄</button><div class="combo-menu" id="style-options" role="listbox" hidden></div></div></div>
+            </div>
+            <div class="prompt-note"><span>✧</span><span>你可以补充想引用的案例、必须出现的观点，或者希望避开的表达。</span></div>
+            <textarea id="notes" rows="2" placeholder="例如：开头要有反常识观点，结尾给出可执行的清单…"></textarea>
+            <button class="primary-button" id="generate-button" type="button"><span class="sparkle">✦</span><span>生成文章与配图</span><span class="button-shortcut">⌘ ↵</span></button>
+            <p class="microcopy" id="generation-help">正在检查生成服务…</p>
+          </section>
+
+          <section class="panel article-panel" aria-labelledby="article-title">
+            <div class="panel-heading article-heading"><div><p class="section-kicker">02 / 内容预览</p><h2 id="article-title">一篇文章，正在这里成形</h2></div><div class="article-actions"><button class="ghost-button" id="refresh-button" type="button">↻ 重新生成</button><div class="sync-action"><button class="sync-button" id="sync-button" type="button"><span>↑</span> 一键同步</button><small id="sync-status" class="sync-status" hidden>已同步</small></div></div></div>
+            <div class="article-meta"><span class="status-badge"><i></i><span id="generation-status">已生成 · 刚刚</span></span><span class="meta-divider"></span><span id="reading-time">预计阅读 4 分钟</span><span class="meta-divider"></span><span id="word-count">实写字数计算中</span><span class="meta-divider"></span><span>原创</span></div>
+            <article class="article-preview">
+              <div class="article-title-wrap"><p class="article-label">效率 / 方法论</p><h3 id="preview-title">别再把 AI 当搜索框：普通人也能用的 4 步工作流</h3><p class="article-lead" id="preview-lead">真正拉开差距的，从来不是“会不会问”，而是能不能把一次灵感变成一套可重复的工作流。</p></div>
+              <figure class="cover-figure" id="cover-figure"><img id="cover-image" src="article-cover.png" alt="AI 工作流主题配图" /><figcaption><span id="cover-caption">主题配图</span><button type="button" id="regenerate-image">重新生成此图</button></figcaption></figure>
+              <div class="article-body" id="article-body">
+                <p>很多人第一次打开 AI，会把它当成一个更快的搜索框：问一个问题，拿一段答案，然后继续下一个问题。</p>
+                <p>但当你真的把它放进工作里，会发现效率的分水岭不在提问技巧，而在于你有没有把它变成一个稳定的“协作系统”。</p>
+                <h4>01 / 先把模糊任务说清楚</h4>
+                <p>不要从“帮我写一篇文章”开始。先说清楚读者是谁、他们卡在哪里，以及读完之后应该做什么。上下文越完整，结果越接近你的判断。</p>
+                <h4>02 / 把一次产出拆成四个小回合</h4>
+                <p>先让 AI 帮你搭骨架，再补充事实和例子，接着做一次反向质疑，最后才是润色。每一回合只解决一个问题，文章会更稳。</p>
+                <div class="quote-block"><span>“</span><p>好的工作流，不是让 AI 替你思考，而是让你的思考更容易被看见。</p></div>
+              </div>
+            </article>
+            <div class="preview-footer"><span id="preview-summary">文章生成中</span><button type="button" id="open-editor" class="text-button">查看正文 →</button></div><div class="generation-overlay" id="generation-overlay" hidden role="status" aria-live="polite"><div class="generation-loader"><span class="loading-ring" aria-hidden="true"></span><strong id="generation-overlay-title">正在创作新文章</strong><p>正在独立生成文章与三张主题配图，请保持页面打开。</p><div class="loading-track" aria-hidden="true"><span></span></div></div></div>
+          </section>
+        </section>
+
+        <section class="bottom-grid" id="account">
+          <div class="mini-card account-card"><div class="mini-card-heading"><div><p class="section-kicker">发布目标</p><h3>公众号草稿箱</h3></div><span class="bound-badge" id="wechat-badge">未绑定</span></div><div class="account-row"><div class="wechat-mark">信</div><div><strong id="wechat-name">尚未绑定公众号</strong><span id="wechat-detail">输入 AppID 和 AppSecret 后验证</span></div><button type="button" class="text-button" id="account-info">绑定公众号</button></div></div>
+          <div class="mini-card checklist-card"><div class="mini-card-heading"><div><p class="section-kicker">同步前检查</p><h3>发布准备度</h3></div><strong class="readiness" id="readiness">0 / 3</strong></div><div class="checklist"><span id="check-title">○ 标题待生成</span><span id="check-images">○ 配图待生成</span><span id="check-account">○ 账号待绑定</span></div></div>
+        </section>
+        <footer class="footer"><span>稿子间 · 让每一次创作都更接近完成</span><span>本地创作与公众号草稿同步</span></footer>
+      </main>
+    </div>
+    <dialog id="wechat-dialog" class="wechat-dialog" aria-labelledby="wechat-dialog-title">
+      <div class="wechat-dialog-head"><div><p class="section-kicker">本机绑定</p><h2 id="wechat-dialog-title">绑定公众号</h2></div><button type="button" id="close-wechat-dialog" aria-label="关闭">×</button></div>
+      <p>输入公众号后台的 AppID 和 AppSecret。程序会自动上传配图并把文章存入草稿箱，不会自动发布。</p>
+      <form id="wechat-form">
+        <label>AppID<input id="wechat-appid" type="text" autocomplete="off" required placeholder="wx..." /></label>
+        <label>AppSecret<input id="wechat-secret" type="password" autocomplete="off" required placeholder="开发密钥" /></label>
+        <label>作者署名（选填）<input id="wechat-author" type="text" maxlength="32" placeholder="例如：公众号作者名" /></label>
+        <p class="wechat-secret-note">绑定信息保存在本机用户目录，服务重启后仍可使用；需要换公众号时可在此修改。不要把 AppSecret 发在聊天里。</p>
+        <p id="wechat-bind-error" class="wechat-bind-error" role="alert" hidden></p>
+        <button class="primary-button" id="wechat-bind-button" type="submit">验证并绑定</button>
+        <button class="wechat-recheck-button" id="wechat-recheck" type="button" hidden>白名单已更新，重新验证</button>
+      </form>
+    </dialog>
+    <aside class="history-panel" id="history-panel" hidden aria-label="历史文章">
+      <div class="history-head"><div><p class="section-kicker">历史文章</p><h2>之前写过的内容</h2></div><button type="button" id="close-history" aria-label="关闭历史文章">×</button></div>
+      <div id="history-list" class="history-list"></div>
+    </aside>    <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-icon">✓</span><span id="toast-message">已同步到公众号草稿箱</span></div>
+    <script src="app.js"></script>
+  </body>
+</html>

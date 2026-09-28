@@ -1,0 +1,6 @@
+generated/
+.env
+.env.*
+.wechat-credentials.json
+node_modules/
+site-archive.tar.gz
